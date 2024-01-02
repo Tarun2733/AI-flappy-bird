@@ -174,6 +174,25 @@ def main():
             if event.type == pygame.QUIT:                       # If we close the application
                 run = False
         #bird.move()
+        add_pipe = False
+        score = 0
+        rem = []
+        for pipe in pipes:
+            if pipe.collide(bird):
+                pass
+            if pipe.x + pipe.PIPE_TOP.get_width() < 0:
+                rem.append(pipe)
+            if not pipe.passed and pipe.x < bird.x:             # If the bird passed the pipe
+                pipe.passed = True
+                pipes.append(Pipe(600))
+
+            pipe.move()
+        if add_pipe:
+            score += 1
+            pipes.append(Pipe(600))
+        for r in rem:
+            pipes.remove(r)
+        
         base.move()
         draw_window(win, bird, pipes, base)
     pygame.quit()
