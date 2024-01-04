@@ -3,17 +3,20 @@ import random
 import os
 import time
 import neat
+pygame.font.init()
 
 # Window size
 WIN_HEIGHT = 800
-WIN_WIDTH = 600
+WIN_WIDTH = 500
 
 # Load images
 BIRD_IMGS = [pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "bird1.png"))),pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "bird2.png"))),pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "bird3.png")))]
 PIPE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "pipe.png")))
 BASE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "base.png")))
 BG_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "bg.png")))
-bg_img = pygame.transform.scale(BG_IMG, (WIN_WIDTH, WIN_HEIGHT))
+bg_img = pygame.transform.scale(BG_IMG, (WIN_WIDTH, WIN_HEIGHT)) # fixes the background image now it covers in the whole screen 
+
+STAT_FONT = pygame.font.SysFont("comicsans", 50)
 
 class Bird:
     IMGS = BIRD_IMGS
@@ -153,10 +156,13 @@ class Base:
 
 
 
-def draw_window(win, bird, pipes, base):
+def draw_window(win, bird, pipes, base, score):
     win.blit(bg_img, (0,0))
     for pipe in pipes:
         pipe.draw(win)
+
+    text = STAT_FONT.render("Score: " + str(score), 1, (255,255,255)) # Create the score text
+    win.blit(text, (WIN_WIDTH - 10 - text.get_width(), 10))           # Draw the score
     base.draw(win)
     bird.draw(win)
     pygame.display.update()
@@ -166,7 +172,7 @@ def draw_window(win, bird, pipes, base):
 def main():
     bird = Bird(230,350)
     base = Base(730)
-    pipes = [Pipe(700)]
+    pipes = [Pipe(600)]
     win = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
     clock = pygame.time.Clock()
 
@@ -197,8 +203,11 @@ def main():
         for r in rem:
             pipes.remove(r)
         
+        if bird.y + bird.img.get_height() >= 730:              # If the bird hits the ground
+            pass
+        
         base.move()
-        draw_window(win, bird, pipes, base)
+        draw_window(win, bird, pipes, base,score)
     pygame.quit()
     quit()
             
