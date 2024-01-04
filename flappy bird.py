@@ -1,3 +1,7 @@
+#Complete code for the flappy bird game played by the AI
+#The code is written in python using pygame and neat library
+#The code is written by Tarun
+
 import pygame
 import random
 import os
