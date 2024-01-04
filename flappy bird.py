@@ -13,6 +13,7 @@ BIRD_IMGS = [pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "bi
 PIPE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "pipe.png")))
 BASE_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "base.png")))
 BG_IMG = pygame.transform.scale2x(pygame.image.load(os.path.join("imgs", "bg.png")))
+bg_img = pygame.transform.scale(BG_IMG, (WIN_WIDTH, WIN_HEIGHT))
 
 class Bird:
     IMGS = BIRD_IMGS
@@ -92,6 +93,8 @@ class Pipe:
         self.bottom = 0                                         # Where the bottom of the pipe is
         self.PIPE_TOP = pygame.transform.flip(PIPE_IMG, False, True) # Flip the pipe image
         self.PIPE_BOTTOM = PIPE_IMG
+        self.passed = False                                     # If the bird passed the pipe
+        self.set_height()                                       # Set the height of the pipe
     
     def set_height(self):
         self.height = random.randrange(50, 450)                 # Random height for the pipe
@@ -151,7 +154,7 @@ class Base:
 
 
 def draw_window(win, bird, pipes, base):
-    win.blit(BG_IMG, (0,0))
+    win.blit(bg_img, (0,0))
     for pipe in pipes:
         pipe.draw(win)
     base.draw(win)
@@ -163,7 +166,7 @@ def draw_window(win, bird, pipes, base):
 def main():
     bird = Bird(230,350)
     base = Base(730)
-    pipes = [Pipe(600)]
+    pipes = [Pipe(700)]
     win = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
     clock = pygame.time.Clock()
 
@@ -178,18 +181,19 @@ def main():
         score = 0
         rem = []
         for pipe in pipes:
+            
             if pipe.collide(bird):
                 pass
             if pipe.x + pipe.PIPE_TOP.get_width() < 0:
                 rem.append(pipe)
             if not pipe.passed and pipe.x < bird.x:             # If the bird passed the pipe
                 pipe.passed = True
-                pipes.append(Pipe(600))
+                add_pipe = True
 
             pipe.move()
         if add_pipe:
             score += 1
-            pipes.append(Pipe(600))
+            pipes.append(Pipe(700))
         for r in rem:
             pipes.remove(r)
         
