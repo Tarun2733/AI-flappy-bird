@@ -213,7 +213,7 @@ def main(genomes,config):
                 bird.jump()
         
         add_pipe = False
-        score = 0
+        
         rem = []
         for pipe in pipes:
             for x, bird in enumerate(birds):
